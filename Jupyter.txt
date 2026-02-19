@@ -1,0 +1,69 @@
+class BankAccount:
+# Static (class) variable
+total_accounts = 0
+
+def __init__(self, holder_name, initial_balance):
+self.holder_name = holder_name
+
+# Increment total accounts
+BankAccount.total_accounts += 1
+
+# Assign unique account number
+self.__account_number = BankAccount.total_accounts
+
+# Private balance
+if initial_balance >= 0:
+self.__balance = initial_balance
+else:
+self.__balance = 0
+
+# Getter (Accessor)
+def get_balance(self):
+return self.__balance
+
+# Deposit with validation
+def deposit(self, amount):
+if amount > 0:
+self.__balance += amount
+else:
+print("Invalid deposit amount")
+
+# Withdraw with validation
+def withdraw(self, amount):
+if amount > 0 and self.__balance >= amount:
+self.__balance -= amount
+else:
+print("Transaction denied")
+
+
+# -------------------------------
+# Subclass: SavingsAccount
+# -------------------------------
+class SavingsAccount(BankAccount):
+def __init__(self, holder_name, initial_balance, interest_rate):
+super().__init__(holder_name, initial_balance)
+self.interest_rate = interest_rate
+
+def apply_interest(self):
+interest = self.get_balance() * self.interest_rate
+self.deposit(interest)
+
+
+# -------------------------------
+# Subclass: VIPAccount
+# -------------------------------
+class VIPAccount(BankAccount):
+def __init__(self, holder_name, initial_balance, overdraft_limit):
+super().__init__(holder_name, initial_balance)
+self.overdraft_limit = overdraft_limit # e.g. -1000
+
+# Method overriding (Polymorphism)
+def withdraw(self, amount):
+if amount > 0:
+if self.get_balance() - amount >= self.overdraft_limit:
+# Accessing private balance via deposit logic
+self._BankAccount__balance -= amount
+else:
+print("Transaction denied")
+else:
+print("Invalid withdrawal amount")
